@@ -12,6 +12,10 @@
 bin/
 gen/
 
+# IDE files
+/.idea/workspace.xml
+/.idea/libraries
+
 # Gradle files
 .gradle/
 build/
@@ -25,3 +29,5 @@ proguard/
 
 # Log Files
 *.log
+
+/captures
