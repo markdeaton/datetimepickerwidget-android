@@ -25,9 +25,9 @@ package com.esri.apl.datetimepickerwidget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.LinearLayout;
@@ -38,20 +38,19 @@ import android.widget.ViewSwitcher;
 
 import java.util.Calendar;
 
-public class DateTimePicker
-        extends RelativeLayout
+public class DateTimePicker extends RelativeLayout
         implements View.OnClickListener, OnDateChangedListener, OnTimeChangedListener {
 	private static final String TAG = "DateTimePicker";
 	// DatePicker reference
-	private DatePicker		datePicker;
+	private DatePicker datePicker;
 	// TimePicker reference
-	private TimePicker		timePicker;
+	private TimePicker timePicker;
 	// ViewSwitcher reference
-	private ViewSwitcher	viewSwitcher;
+	private ViewSwitcher viewSwitcher;
 	// Calendar reference
-	private Calendar		mCalendar;
-	// Min/max dates allowed; no null for longs, so use Long.MIN_VALUE instead
-	private long			minDate = Long.MIN_VALUE, maxDate = Long.MIN_VALUE;
+	private Calendar mCalendar;
+	// Min/max dates allowed
+	private Long minDate = null, maxDate = null;
 
 	// Constructor start
 	public DateTimePicker(Context context) {
@@ -75,11 +74,11 @@ public class DateTimePicker
 		inflater.inflate(R.layout.datetimepicker, this, true);
 
 		// Inflate the date and time picker views
-//		Log.d(TAG, "Inflate date and time pickers - DateTimePicker constructor");
+		Log.d(TAG, "Inflate date and time pickers - DateTimePicker constructor");
 		LinearLayout datePickerView = (LinearLayout) inflater.inflate(R.layout.datepicker, null);
-		datePicker = (DatePicker) datePickerView.findViewById(R.id.DatePicker);
+		datePicker = datePickerView.findViewById(R.id.DatePicker);
 		LinearLayout timePickerView = (LinearLayout) inflater.inflate(R.layout.timepicker, null);
-		timePicker = (TimePicker) timePickerView.findViewById(R.id.TimePicker);
+		timePicker = timePickerView.findViewById(R.id.TimePicker);
 
 		// Grab a Calendar instance
 		mCalendar = Calendar.getInstance();
@@ -94,11 +93,11 @@ public class DateTimePicker
 		timePicker.setOnTimeChangedListener(this);
 
 		// Grab the ViewSwitcher so we can attach our picker views to it
-		viewSwitcher = (ViewSwitcher) this.findViewById(R.id.DateTimePickerVS);
+		viewSwitcher = this.findViewById(R.id.DateTimePickerVS);
 
 		// Handle button clicks
-		((Button) findViewById(R.id.SwitchToTime)).setOnClickListener(this); // shows the time picker
-		((Button) findViewById(R.id.SwitchToDate)).setOnClickListener(this); // shows the date picker
+		findViewById(R.id.SwitchToTime).setOnClickListener(this); // shows the time picker
+		findViewById(R.id.SwitchToDate).setOnClickListener(this); // shows the date picker
 
 		// Populate ViewSwitcher
 		viewSwitcher.addView(datePickerView, 0);
@@ -178,21 +177,21 @@ public class DateTimePicker
 		return timePicker.is24HourView();
 	}
 
-	/** If there's a minimum bound on the choosable date, this will return it; or Long.MIN_VALUE if no bound set **/
-	public long getMinDate() {
+	/** If there's a minimum bound on the choosable date, this will return it; or null if no bound set **/
+	public Long getMinDate() {
 		return minDate;
 	}
 
-	public void setMinDate(long minDate) {
+	public void setMinDate(Long minDate) {
 		this.minDate = minDate;
 		datePicker.setMinDate(minDate);
 	}
-	/** If there's a maximum bound on the choosable date, this will return it; or Long.MIN_VALUE if no bound set **/
-	public long getMaxDate() {
+	/** If there's a maximum bound on the choosable date, this will return it; or null if no bound set **/
+	public Long getMaxDate() {
 		return maxDate;
 	}
 
-	public void setMaxDate(long maxDate) {
+	public void setMaxDate(Long maxDate) {
 		this.maxDate = maxDate;
 		datePicker.setMaxDate(maxDate);
 	}
